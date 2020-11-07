@@ -1,0 +1,24 @@
+Pentru compilare (în această ordine):
+
+python server.py 8000
+python clientB.py 8001
+python clientA.py 8000 8001 
+-> Se alege modul de criptare: ecb / cfb
+
+-------------------------------------------
+
+Conținut:
+3 fișiere sursă:
+server.py - Key Manager care se ocupă cu trimiterea cheii către nodul A
+clientA.py - nodul A care inițiază comunicarea cu Key Managerul si nodul B
+clientB.py - nodul B care primește blocuri criptate de la A și le decriptează cu ajutrul cheii primite
+
+1 fișier de intrare file.txt din care se extrag blocuri, blocuri care vor fi criptate și trimse (în nodul A), respectiv primite, decriptate (in nodul B)
+
+------------------------------------------
+
+Modul de rezovare:
+Nodul A trimite modul de operare (ECB sau CFB) către nodul B. Key Manager-ul generează cheia, este criptată și o trimite nodului A. Mai departe, nodul A trimite și lui B cheia primită de la Key Manager. Odată ce ambele noduri A și B au cheia, aceasta va fi decriptată folosind cheia K' și pot începe comunicarea.
+Nodul A extrage blocuri de câte 16 bytes (se apelează la funcția de padare în cazul ultimului block) din fișierul text file.txt, le criptează folosind cheia primită de la KM și le trimite lui B. Nodul B, la rândul lui, primește blocuri de 16 bytes, le decriptează folosind cheia (de asemenea se face unpad) și astfel nodul B ajunge la textul original trimis de A. Acest proces se repetă până când am ajuns la finalul fișierului. La final nodul B va afișa textul obținut.
+
+
